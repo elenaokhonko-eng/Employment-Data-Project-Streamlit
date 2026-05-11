@@ -1,0 +1,12 @@
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+venv/
+.streamlit/secrets.toml
+
+# Large local source files. The deployed app uses small files in data/.
+SGJobData.csv
+SGJobData_cleaned.csv
+SGJobData.db
+SGJobData_cleaned.db
+*.Zone.Identifier
