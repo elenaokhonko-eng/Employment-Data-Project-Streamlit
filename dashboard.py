@@ -242,21 +242,37 @@ with tab_competition:
 with tab_finder:
     st.subheader("Best-Paid, Lower-Competition Opportunities")
     ranked = title_filtered.sort_values("opportunity_score", ascending=False).head(top_n)
+    ranked_display = ranked[
+        [
+            "title_display",
+            "primary_category",
+            "postings",
+            "total_vacancies",
+            "median_salary",
+            "avg_applications",
+            "avg_views",
+            "opportunity_score",
+        ]
+    ].copy()
     st.dataframe(
-        ranked[
-            [
-                "title_display",
-                "primary_category",
-                "postings",
-                "total_vacancies",
-                "median_salary",
-                "avg_applications",
-                "avg_views",
-                "opportunity_score",
-            ]
-        ].style.background_gradient(subset=["opportunity_score"], cmap="Greens"),
+        ranked_display,
         use_container_width=True,
         hide_index=True,
+        column_config={
+            "title_display": st.column_config.TextColumn("Job Title"),
+            "primary_category": st.column_config.TextColumn("Category"),
+            "postings": st.column_config.NumberColumn("Postings", format="%d"),
+            "total_vacancies": st.column_config.NumberColumn("Vacancies", format="%d"),
+            "median_salary": st.column_config.NumberColumn("Median Salary", format="$%d"),
+            "avg_applications": st.column_config.NumberColumn("Avg Applications", format="%.1f"),
+            "avg_views": st.column_config.NumberColumn("Avg Views", format="%.1f"),
+            "opportunity_score": st.column_config.ProgressColumn(
+                "Opportunity Score",
+                min_value=0,
+                max_value=100,
+                format="%.1f",
+            ),
+        },
     )
 
     csv = ranked.to_csv(index=False).encode("utf-8")
